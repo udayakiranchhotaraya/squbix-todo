@@ -8,10 +8,14 @@ const app = express();
 
 const dbConnect = require('./db/db.config');
 
+const Router = require('./routes/index.router');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(express.static('/public'));
 app.use(morgan('dev'));
+
+app.use('/api', Router);
 
 const PORT = process.env.PORT || 5000;
 const SERVER_URL = `http://localhost:${PORT}`;
