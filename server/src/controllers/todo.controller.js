@@ -164,10 +164,39 @@ async function markToDoAsComplete (req, res) {
     }
 }
 
+// function to delete a ToDo item
+async function deleteToDo (req, res) {
+    if (req.user) {
+        try {
+            // Getting the ToDo item ID from the request parameters
+            const { id } = req.params;
+            // Getting the user's ID from the request
+            const userID = req.user.id;
+
+            // Finding and delete the ToDo item with the specified ID
+            const todo = await ToDo.findOneAndDelete({ _id : id, user: userID });
+
+             // If the ToDo item is deleted successfully
+            if (todo) {
+                // responding with a 200 status code (OK) and a success message along with the deleted ToDo item
+                return res.status(200).json({ "message" : "ToDo deleted successfully", todo });
+            } else {
+                // If the deletion fails, responding with a 500 status code (Internal Server Error) and an error message
+                return res.status(500).json({ "message" : "Some error occurred" });
+            }
+        } catch (error) {
+            return res.status(400).json({ "message" : error.message });
+        }
+    } else {
+        return res.status(401).json({ "message" : "Please login to continue" });
+    }
+}
+
 module.exports = {
     newToDo,
     getUserToDos,
     getToDo,
     updateToDo,
-    markToDoAsComplete
+    markToDoAsComplete,
+    deleteToDo
 }
