@@ -45,7 +45,7 @@ async function getUserToDos (req, res) {
             const todos = await ToDo.find({ user: userID });
 
             // If no ToDo items are found
-            if (todos.length == 0) {
+            if (todos.length === 0) {
                 // responding with a 404 status code (Not Found) and a message indicating no items were found
                 return res.status(404).json({ "message" : "No ToDo Item(s) found" });
             } else {
@@ -62,7 +62,37 @@ async function getUserToDos (req, res) {
     }
 }
 
+// function to get a specific ToDo item
+async function getToDo (req, res) {
+    // Checking if the user is logged in
+    if (req.user) {
+        try {
+            // Getting the ToDo item ID from the request parameters
+            const { id } = req.params;
+            // Getting the user's ID from the request headers
+            const userID = req.user.id;
+
+            // Finding the ToDo item with the specified ID and associated with the user's ID
+            const todo = await ToDo.findOne({ _id: id, user: userID });
+
+            // If the ToDo item is found
+            if (todo) {
+                // responding with a 200 status code (OK) and the ToDo item
+                return res.status(200).json({ todo });
+            } else {
+                // If the ToDo item is not found, responding with a 404 status code (Not Found) and an error message
+                return res.status(404).json({ "message" : "No ToDo Item(s) found" })
+            }
+        } catch (error) {
+            return res.status(400).json({ "message" : error.message });
+        }
+    } else {
+        return res.status(401).json({ "message" : "Please login to continue" });
+    }
+}
+
 module.exports = {
     newToDo,
-    getUserToDos
+    getUserToDos,
+    getToDo
 }
