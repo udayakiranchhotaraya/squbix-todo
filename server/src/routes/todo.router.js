@@ -3,7 +3,8 @@ const express = require('express');
 const { 
     newToDo,
     getUserToDos,
-    getToDo
+    getToDo,
+    updateToDo
 } = require('../controllers/todo.controller');
 
 const ToDoRouter = express.Router();
@@ -14,5 +15,7 @@ ToDoRouter.post('/new', newToDo);
 ToDoRouter.get('/', getUserToDos);
 // Get specific todo
 ToDoRouter.get('/:id', getToDo);
+// Update todo
+ToDoRouter.put('/:id/update', updateToDo);
 
 module.exports = ToDoRouter;

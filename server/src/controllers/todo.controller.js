@@ -91,8 +91,45 @@ async function getToDo (req, res) {
     }
 }
 
+// function to update a specific ToDo item
+async function updateToDo (req, res) {
+    if (req.user) {
+        try {
+            // Getting the ToDo item ID from the request parameters
+            const { id } = req.params;
+            // Getting the user's ID from the request
+            const userID = req.user.id;
+            // Destructuring the fields from the request body
+            const { title, description } = req.body;
+
+            // Finding the ToDo item with the specified ID and associated with the user's ID, and updating it with the new title and/or description
+            const todo = await ToDo.findOneAndUpdate({ _id: id, user: userID }, {
+                title: title,
+                description: description
+            }, {
+                new: true
+            });
+
+            // If the ToDo item is updated successfully
+            if (todo) {
+                // responding with a 200 status code (OK) and a success message along with the updated ToDo item
+                return res.status(200).json({ "message" : "ToDo updated successfully", todo });
+            } else {
+                // If the update fails, responding with a 500 status code (Internal Server Error) and an error message
+                return res.status(500).json({ "message" : "Some error occurred" });
+            }
+        } catch (error) {
+            // If there is an error, responding with a 400 status code (Bad Request) and the error message
+            return res.status(400).json({ "message" : error.message });
+        }
+    } else {
+        return res.status(401).json({ "message" : "Please login to continue" });
+    }
+}
+
 module.exports = {
     newToDo,
     getUserToDos,
-    getToDo
+    getToDo,
+    updateToDo
 }
