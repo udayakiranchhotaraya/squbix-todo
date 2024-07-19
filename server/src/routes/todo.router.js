@@ -4,7 +4,8 @@ const {
     newToDo,
     getUserToDos,
     getToDo,
-    updateToDo
+    updateToDo,
+    markToDoAsComplete
 } = require('../controllers/todo.controller');
 
 const ToDoRouter = express.Router();
@@ -17,5 +18,7 @@ ToDoRouter.get('/', getUserToDos);
 ToDoRouter.get('/:id', getToDo);
 // Update todo
 ToDoRouter.put('/:id/update', updateToDo);
+// Mark a todo as complete
+ToDoRouter.put('/:id/markAsComplete', markToDoAsComplete);
 
 module.exports = ToDoRouter;

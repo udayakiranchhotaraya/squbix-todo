@@ -127,9 +127,47 @@ async function updateToDo (req, res) {
     }
 }
 
+// function to mark a specific ToDo item as complete
+async function markToDoAsComplete (req, res) {
+    if (req.user) {
+        try {
+            // Getting the ToDo item ID from the request parameters
+            const { id } = req.params;
+            // Getting the user's ID from the request headers
+            const userID = req.user.id;
+            
+            // Finding the ToDo item with the specified ID and associated with the user's ID
+            const todo = await ToDo.findOne({ _id: id, user: userID });
+
+            // Checking if the ToDo item is already marked as completed
+            if (todo.status === "completed") {
+                // If already marked as completed, responding with a 200 status code (OK) and a message indicating that
+                return res.status(200).json({ "message" : "Already marked as complete" });
+            } else {
+                // updating the status to "completed" if not already completed
+                todo.status = "completed"
+                await todo.save();
+            }
+
+            // If the ToDo item is updated successfully
+            if (todo) {
+                // responding with a 200 status code (OK) and a success message along with the updated ToDo item
+                return res.status(200).json({ "message" : "Marked as complete", todo });
+            } else {
+                return res.status(500).json({ "message" : "Some error occured" });
+            }
+        } catch (error) {
+            return res.status(400).json({ "message" : error.message });
+        }
+    } else {
+        return res.status(401).json({ "message" : "Plese login to continue" });
+    }
+}
+
 module.exports = {
     newToDo,
     getUserToDos,
     getToDo,
-    updateToDo
+    updateToDo,
+    markToDoAsComplete
 }
