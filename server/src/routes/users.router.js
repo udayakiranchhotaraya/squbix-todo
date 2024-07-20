@@ -7,6 +7,54 @@ const {
 
 const UserRouter = express.Router();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ *       properties:
+ *         name:
+ *           type: object
+ *           required:
+ *             - firstName
+ *           properties:
+ *             firstName:
+ *               type: string
+ *               description: The user's first name
+ *               example: "John"
+ *             lastName:
+ *               type: string
+ *               description: The user's last name
+ *               example: "Doe"
+ *         email:
+ *           type: string
+ *           description: The user's email address
+ *           example: "john.doe@example.com"
+ *           format: email
+ *           unique: true
+ *         password:
+ *           type: string
+ *           description: The user's password
+ *           example: "password123"
+ *           format: password
+ *       example:
+ *         name:
+ *           firstName: "John"
+ *           lastName: "Doe"
+ *         email: "john.doe@example.com"
+ *         password: "password123"
+ *   securitySchemes:
+ *     BearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
 // Register router
 /**
  * @swagger
