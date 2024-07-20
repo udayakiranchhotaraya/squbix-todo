@@ -18,7 +18,7 @@ This Todo Application allows users to manage their todo items efficiently. It pr
 1. **Clone the repository**:
     ```sh
     git clone https://github.com/udayakiranchhotaraya/squbix-todo.git
-    cd todo-app
+    cd squbix-todo
     ```
 
 2. **Install dependencies**:
