@@ -3,10 +3,9 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
+const { specs, swaggerUI } = require('./configs/swagger.config');
 
 const app = express();
-
-const dbConnect = require('./db/db.config');
 
 const Router = require('./routes/index.router');
 
@@ -16,16 +15,6 @@ app.use(express.static('/public'));
 app.use(morgan('dev'));
 
 app.use('/api', Router);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 
-const PORT = process.env.PORT || 5000;
-const SERVER_URL = `http://localhost:${PORT}`;
-
-(async function () {
-    try {
-        await dbConnect();
-        app.listen(PORT, () => console.log(`Server started at ${SERVER_URL}`));
-    } catch (error) {
-        console.error(`Connection error: ${error}`);
-        process.exit(1);
-    }
-})();
+module.exports = app;
